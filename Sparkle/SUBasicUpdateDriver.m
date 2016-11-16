@@ -207,6 +207,7 @@
 
     if ([[updater delegate] respondsToSelector:@selector(updater:didFindValidUpdate:)]) {
         if(![[updater delegate] updater:self.updater didFindValidUpdate:self.updateItem]) {
+            [self abortUpdate];
             return false;
         }
     }

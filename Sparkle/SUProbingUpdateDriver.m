@@ -19,11 +19,16 @@
     id<SUUpdaterPrivate> updater = self.updater;
     id<SUUpdaterDelegate> updaterDelegate = [updater delegate];
 
-    if ([updaterDelegate respondsToSelector:@selector(updater:didFindValidUpdate:)])
-        if(![updaterDelegate updater:self.updater didFindValidUpdate:self.updateItem])
+    if ([updaterDelegate respondsToSelector:@selector(updater:didFindValidUpdate:)]) {
+        if(![updaterDelegate updater:self.updater didFindValidUpdate:self.updateItem]) {
+            [self abortUpdate];
             return false;
+        }
+    }
+    
     NSDictionary *userInfo = (self.updateItem != nil) ? @{ SUUpdaterAppcastItemNotificationKey: self.updateItem } : nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SUUpdaterDidFindValidUpdateNotification object:self.updater userInfo:userInfo];
+    
     [self abortUpdate];
     return true;
 }
