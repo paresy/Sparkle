@@ -199,20 +199,24 @@
     }
 }
 
-- (void)didFindValidUpdate
+- (bool)didFindValidUpdate
 {
     assert(self.updateItem);
     
     id<SUUpdaterPrivate> updater = self.updater;
 
     if ([[updater delegate] respondsToSelector:@selector(updater:didFindValidUpdate:)]) {
-        [[updater delegate] updater:self.updater didFindValidUpdate:self.updateItem];
+        if(![[updater delegate] updater:self.updater didFindValidUpdate:self.updateItem]) {
+            return false;
+        }
     }
 
     [[NSNotificationCenter defaultCenter] postNotificationName:SUUpdaterDidFindValidUpdateNotification
                                                         object:self.updater
                                                       userInfo:@{ SUUpdaterAppcastItemNotificationKey: self.updateItem }];
     [self downloadUpdate];
+    
+    return true;
 }
 
 - (void)didNotFindUpdate

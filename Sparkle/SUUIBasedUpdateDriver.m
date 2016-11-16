@@ -56,16 +56,18 @@
     return self;
 }
 
-- (void)didFindValidUpdate
+- (bool)didFindValidUpdate
 {
     id<SUUpdaterPrivate> updater = self.updater;
     if ([[updater delegate] respondsToSelector:@selector(updater:didFindValidUpdate:)]) {
-        [[updater delegate] updater:self.updater didFindValidUpdate:self.updateItem];
+        if(![[updater delegate] updater:self.updater didFindValidUpdate:self.updateItem]) {
+            return false;
+        }
     }
 
     if (self.automaticallyInstallUpdates) {
         [self updateAlertFinishedWithChoice:SUInstallUpdateChoice];
-        return;
+        return true;
     }
 
     self.updateAlert = [[SUUpdateAlert alloc] initWithAppcastItem:self.updateItem host:self.host completionBlock:^(SUUpdateAlertChoice choice) {
@@ -95,6 +97,9 @@
         [window makeKeyAndOrderFront:self];
     } else
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:NSApp];
+    
+    return true;
+    
 }
 
 - (BOOL)shouldDisableKeyboardShortcutForInstallButton {

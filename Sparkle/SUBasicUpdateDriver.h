@@ -25,7 +25,7 @@
 - (BOOL)itemContainsSkippedVersion:(SUAppcastItem *)ui;
 - (BOOL)itemContainsValidUpdate:(SUAppcastItem *)ui;
 - (void)appcastDidFinishLoading:(SUAppcast *)ac;
-- (void)didFindValidUpdate;
+- (bool)didFindValidUpdate;
 - (void)didNotFindUpdate;
 
 - (void)downloadUpdate;

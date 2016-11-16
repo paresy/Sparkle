@@ -24,10 +24,10 @@
     return self;
 }
 
-- (void)didFindValidUpdate
+- (bool)didFindValidUpdate
 {
     self.showErrors = YES; // We only start showing errors after we present the UI for the first time.
-    [super didFindValidUpdate];
+    return [super didFindValidUpdate];
 }
 
 - (void)didNotFindUpdate
